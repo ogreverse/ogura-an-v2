@@ -1,0 +1,12 @@
+appId: jp.co.ogreverse.ogura-an-v2
+productName: Ogura An V2
+copyright: Copyright © 2024 Ogreverse
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
