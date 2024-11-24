@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "author": "Ogreverse",
   "main": "app/background.js",
+  "type": "module",
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
