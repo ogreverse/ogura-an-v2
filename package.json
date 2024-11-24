@@ -5,10 +5,11 @@
   "version": "1.0.0",
   "author": "Ogreverse",
   "main": "app/background.js",
-  "type": "module",
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
+    "asar:extract": "rm -rf output 2> /dev/null && mkdir -p output && npx asar extract dist/mac/ogura-an-v2.app/Contents/Resources/app.asar ./output",
+    "asar:extract //": "build で生成した asar ファイルを解凍",
     "postinstall": "electron-builder install-app-deps",
     "make:app:mac": "electron-builder --mac --arm64",
     "make:app:mac //": "Mac(Apple Silicon)用インストーラー生成",
@@ -17,7 +18,16 @@
     "format": "prettier --write .",
     "prepare": "husky install"
   },
+  "build": {
+    "files": [
+      ".env",
+      "app/**/*",
+      "renderer/**/*"
+    ]
+  },
   "dependencies": {
+    "axios": "^1.7.7",
+    "electron-log": "^5.2.2",
     "electron-serve": "^1.3.0",
     "electron-store": "^8.2.0"
   },
