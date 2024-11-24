@@ -1,5 +1,5 @@
 import js from "@eslint/js";
-import parser from '@typescript-eslint/parser'
+import parser from "@typescript-eslint/parser";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 
 const targetFiles = { files: ["**/*.{js,ts,mjs,mts,cjs,cts,jsx,tsx}"] };
@@ -11,7 +11,7 @@ const languageOptions = {
       project: "./tsconfig.json",
     },
   },
-}
+};
 
 const plugins = {
   plugins: {
