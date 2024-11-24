@@ -1,8 +1,17 @@
 import js from "@eslint/js";
+import parser from '@typescript-eslint/parser'
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 
 const targetFiles = { files: ["**/*.{js,ts,mjs,mts,cjs,cts,jsx,tsx}"] };
 const ignores = { ignores: ["**/dist/**"] };
+const languageOptions = {
+  languageOptions: {
+    parser: parser,
+    parserOptions: {
+      project: "./tsconfig.json",
+    },
+  },
+}
 
 const plugins = {
   plugins: {
@@ -25,6 +34,7 @@ const individualRules = {
 };
 
 export default [
+  languageOptions,
   targetFiles,
   ignores,
   js.configs.recommended,
