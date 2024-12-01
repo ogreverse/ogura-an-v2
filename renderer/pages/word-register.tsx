@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import Button from "../components/common/butttons/button";
 
 export default function HomePage() {
   // 状態管理
@@ -98,20 +99,12 @@ export default function HomePage() {
 
         {/* Button Area */}
         <div className="flex justify-end gap-2 flex-wrap mb-4">
-          <button
-            id="button__clear"
-            className="px-2 py-1 text-white bg-gray-800 rounded-md hover:bg-gray-600"
-            onClick={handleClear}
-          >
+          <Button id="button__clear" onClick={handleClear}>
             消去
-          </button>
-          <button
-            id="button__search"
-            onClick={handleSearch}
-            className="px-2 py-1 text-white bg-gray-800 rounded-md hover:bg-gray-600"
-          >
+          </Button>
+          <Button id="button__search" onClick={handleSearch}>
             調べる
-          </button>
+          </Button>
         </div>
 
         {/* Result Wrapper */}
@@ -122,12 +115,9 @@ export default function HomePage() {
                 {result}
               </pre>
               <div className="flex">
-                <button
-                  onClick={handleRegister}
-                  className="ml-auto px-2 py-1 text-white bg-gray-800 rounded-md hover:bg-gray-600"
-                >
+                <Button onClick={handleRegister} className="ml-auto">
                   登録
-                </button>
+                </Button>
               </div>
             </div>
           )}
