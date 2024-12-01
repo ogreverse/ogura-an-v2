@@ -26,6 +26,7 @@
     ]
   },
   "dependencies": {
+    "@notionhq/client": "^2.2.15",
     "axios": "^1.7.7",
     "electron-store": "^8.2.0"
   },
