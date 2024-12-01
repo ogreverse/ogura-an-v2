@@ -29,13 +29,25 @@ let isQuitting: boolean = false;
   notionHandler();
   openAiHandler(mainWindow);
 
+  let port = null;
   if (isProd) {
     await mainWindow.loadURL("app://./home");
   } else {
-    const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/home`);
+    port = process.argv[2];
+    await mainWindow.loadURL(`http://localhost:${port}/word-register`);
     mainWindow.webContents.openDevTools();
   }
+
+  const changePage = (page: string) => {
+    // ウィンドウを閉じてからページ遷移して開く
+    mainWindow?.close();
+
+    mainWindow?.loadURL(
+      port ? `http://localhost:${port}/${page}` : `app://./${page}`,
+    );
+
+    mainWindow?.show();
+  };
 
   // システムトレイ設定
   const iconPath = path.join(
@@ -45,7 +57,7 @@ let isQuitting: boolean = false;
   );
   const tray = new Tray(iconPath);
   const contextMenu = Menu.buildFromTemplate([
-    { label: "ワード登録", click: () => mainWindow?.show() },
+    { label: "ワード登録", click: () => changePage("word-register") },
     {
       label: "終了",
       click: () => {

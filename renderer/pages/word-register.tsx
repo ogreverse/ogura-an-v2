@@ -65,7 +65,7 @@ export default function HomePage() {
       </Head>
       <main className="p-4 text-sm font-sans bg-white">
         {/* Header */}
-        <header className="flex items-center gap-2 mb-6">
+        <header className="flex items-center gap-2 mb-2">
           <Image
             className="w-8 h-8"
             src="/images/icon_page.png"
@@ -75,6 +75,10 @@ export default function HomePage() {
           />
           <h1 className="text-lg text-gray-800">Ogura AN</h1>
         </header>
+
+        <div>
+          <h2 className="text-xs mb-4 font-bold">単語登録</h2>
+        </div>
 
         {/* Input Areas */}
         <div className="mb-4">
