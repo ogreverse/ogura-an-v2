@@ -2,15 +2,6 @@ import React, { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 
-declare global {
-  interface Window {
-    api: {
-      fetchWordMeaning: (word: string, context: string) => Promise<string>;
-      registerToNotion: (result: string) => Promise<void>;
-    };
-  }
-}
-
 export default function HomePage() {
   // 状態管理
   const [word, setWord] = useState("");
