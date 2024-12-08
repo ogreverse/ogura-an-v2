@@ -31,7 +31,7 @@ let isQuitting: boolean = false;
 
   let port = null;
   if (isProd) {
-    await mainWindow.loadURL("app://./home");
+    await mainWindow.loadURL("app://./word-register");
   } else {
     port = process.argv[2];
     await mainWindow.loadURL(`http://localhost:${port}/word-register`);

@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Button from "../components/common/butttons/button";
 
-export default function HomePage() {
+export default function WordRegister() {
   // 状態管理
   const [word, setWord] = useState("");
   const [context, setContext] = useState("");
