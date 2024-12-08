@@ -58,6 +58,7 @@ let isQuitting: boolean = false;
   const tray = new Tray(iconPath);
   const contextMenu = Menu.buildFromTemplate([
     { label: "ワード登録", click: () => changePage("word-register") },
+    { label: "ワード確認テスト", click: () => changePage("word-tester") },
     {
       label: "終了",
       click: () => {

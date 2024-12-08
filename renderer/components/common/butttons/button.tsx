@@ -6,6 +6,8 @@ interface ButtonProps {
   children: React.ReactNode;
   className?: string;
   type?: "button" | "submit" | "reset";
+  color?: "black" | "white" | null;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -14,13 +16,32 @@ const Button: React.FC<ButtonProps> = ({
   children,
   className = "",
   type = "button",
+  color = "black",
+  disabled = false,
 }) => {
+  let defaultClassName = "text-xs px-2 py-1 rounded-md";
+
+  if (className) {
+    defaultClassName = `${defaultClassName} ${className}`;
+  }
+
+  if (disabled) {
+    defaultClassName = `${defaultClassName} opacity-50 cursor-not-allowed`;
+  }
+
+  if (color === "black") {
+    defaultClassName = `${defaultClassName} text-white bg-gray-800 hover:bg-gray-600`;
+  } else if (color === "white") {
+    defaultClassName = `${defaultClassName} text-black bg-white hover:bg-gray-200 border border-gray-300`;
+  }
+
   return (
     <button
       id={id}
       onClick={onClick}
       type={type}
-      className={`text-xs px-2 py-1 text-white bg-gray-800 rounded-md hover:bg-gray-600 ${className}`}
+      className={defaultClassName}
+      disabled={disabled}
     >
       {children}
     </button>
