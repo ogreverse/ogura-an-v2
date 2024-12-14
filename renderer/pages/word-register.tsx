@@ -9,35 +9,73 @@ export default function WordRegister() {
   const [word, setWord] = useState("");
   const [context, setContext] = useState("");
   const [result, setResult] = useState<string | null>(null);
+  const [resultText, setResultText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const resultLabels = {
+    word: "単語",
+    meaning: "意味",
+    usage: "用例",
+    tag: "タグ",
+    q_word: "単語問題文",
+    q_meaning: "意味問題文",
+    q_meaning_a: "意味問題 解答候補",
+  };
 
   // クリアボタンの処理
   const handleClear = () => {
     setWord("");
     setContext("");
     setResult(null);
+
+    // 一番上までスクロール
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // 検索ボタンの処理
   const handleSearch = async () => {
     if (!word) {
-      alert("ワードを入力してください");
+      alert("単語を入力してください");
       return;
     }
 
+    setResultText("検索中...");
     setLoading(true);
-    setResult("検索中...");
 
     try {
       const fetchedResult = await window.api.fetchWordMeaning(word, context);
-
       setResult(fetchedResult);
     } catch (error) {
-      setResult("エラーが発生しました");
+      setResultText("エラーが発生しました");
     } finally {
       setLoading(false);
     }
   };
+
+  // OpenAIのレスポンスを表示用のテキストに変換
+  useEffect(() => {
+    const resultObject = JSON.parse(result);
+
+    if (!resultObject) return;
+
+    let resultTexts: string[] = [];
+    for (const [key, value] of Object.entries(resultObject)) {
+      const label = resultLabels[key] || key;
+      resultTexts.push(`【${label}】\n${value}`);
+    }
+
+    setResultText(resultTexts.join("\n\n"));
+  }, [result]);
+
+  // 結果表示へのスクロール
+  useEffect(() => {
+    if (!resultText) return;
+
+    const resultWrapper = document.getElementById("result__wrapper");
+    if (resultWrapper) {
+      resultWrapper.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [resultText]);
 
   // OpenAIのレスポンスをNotionへの登録用のパラメータに変換
   const convertResultToCreateParams = async (
@@ -174,7 +212,7 @@ export default function WordRegister() {
         {/* Input Areas */}
         <div className="mb-4">
           <label htmlFor="input__word" className="block text-xs mb-1">
-            ワード
+            単語
           </label>
           <input
             type="text"
@@ -211,7 +249,7 @@ export default function WordRegister() {
           {result && (
             <div>
               <pre className="result__text w-full whitespace-pre-wrap text-xs mb-4">
-                {result}
+                {resultText}
               </pre>
               <div className="flex">
                 <Button onClick={handleRegister} className="ml-auto">
