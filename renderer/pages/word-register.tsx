@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Button from "../components/common/butttons/button";
+import { CreatePageParameters } from "@notionhq/client/build/src/api-endpoints";
 
 export default function WordRegister() {
   // 状態管理
@@ -38,12 +39,110 @@ export default function WordRegister() {
     }
   };
 
+  // OpenAIのレスポンスをNotionへの登録用のパラメータに変換
+  const convertResultToCreateParams = async (
+    resultText: string,
+  ): Promise<CreatePageParameters> => {
+    const resultParams = JSON.parse(resultText);
+
+    // 返却値の形式チェック
+    if (!resultParams.word || !resultParams.meaning) {
+      throw new Error("返却値が不正です");
+    }
+
+    const nowLocal = new Date();
+    const diff: number = nowLocal.getTimezoneOffset() * 60 * 1000;
+    const plusLocal = new Date(nowLocal.getTime() - diff);
+    let createdAt = plusLocal.toISOString();
+    createdAt = createdAt.slice(0, 19) + "+09:00";
+
+    const tags = resultParams.tag.split(",");
+    const notionDatabaseId = await window.api.fetchDatabaseId("word");
+    console.log("notionDatabaseId", notionDatabaseId);
+
+    if (!notionDatabaseId) {
+      throw new Error("データベースIDが設定されていません");
+    }
+
+    return {
+      parent: { database_id: notionDatabaseId },
+      properties: {
+        Word: {
+          title: [
+            {
+              text: {
+                content: resultParams.word,
+              },
+            },
+          ],
+        },
+        Meaning: {
+          rich_text: [
+            {
+              text: {
+                content: resultParams.meaning,
+              },
+            },
+          ],
+        },
+        Usage: {
+          rich_text: [
+            {
+              text: {
+                content: resultParams.usage || "",
+              },
+            },
+          ],
+        },
+        Tags: {
+          multi_select: tags.map((tag: string) => {
+            return {
+              name: tag.trim(),
+            };
+          }),
+        },
+        QuestionWordText: {
+          rich_text: [
+            {
+              text: {
+                content: resultParams.q_word || "",
+              },
+            },
+          ],
+        },
+        QuestionMeaningText: {
+          rich_text: [
+            {
+              text: {
+                content: resultParams.q_meaning || "",
+              },
+            },
+          ],
+        },
+        QuestionMeaningAnswer: {
+          rich_text: [
+            {
+              text: {
+                content: resultParams.q_meaning_a || "",
+              },
+            },
+          ],
+        },
+        CreatedAt: {
+          date: { start: createdAt },
+        },
+      },
+    };
+  };
+
   // Notionへの登録ボタンの処理
   const handleRegister = async () => {
     if (!result) return;
 
     try {
-      await window.api.registerToNotion(result);
+      const createdParams = await convertResultToCreateParams(result);
+      await window.api.registerToNotion(createdParams);
+
       alert("Notionに登録しました");
     } catch (error) {
       alert("Notionへの登録に失敗しました");

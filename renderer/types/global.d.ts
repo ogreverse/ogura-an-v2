@@ -1,4 +1,5 @@
 import {
+  CreatePageParameters,
   QueryDatabaseResponse,
   UpdatePageParameters,
 } from "@notionhq/client/build/src/api-endpoints";
@@ -6,8 +7,9 @@ import {
 declare global {
   interface Window {
     api: {
+      fetchDatabaseId: (databaseKey: string) => Promise<string>;
       fetchWordMeaning: (word: string, context: string) => Promise<string>;
-      registerToNotion: (result: string) => Promise<void>;
+      registerToNotion: (createParams: CreatePageParameters) => Promise<void>;
       getDataFromNotion: (
         filter: NotionFetchFilter,
       ) => Promise<QueryDatabaseResponse>;
